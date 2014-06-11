@@ -1,0 +1,188 @@
+<html>
+<head>
+    <title>David Foster Wallace Lorem Ipsum Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="description" content="Generate lorem ipsum filler text out of notable phrases from the works of David Foster Wallace." />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="icon.png" class="logo">
+            <h1>DFW Ipsum</h1>
+        </div>
+        <p>In homage to the late great
+          <a href="http://www.amazon.com/David-Foster-Wallace/e/B000APPJ3S">David Foster Wallace</a>,
+          generate prosaic text blocks worthy of the encyclopedic novelist.
+        </p>
+
+        <form>
+            <div class="form-item">
+                <label for="count">Number of Paragraphs:</label>
+                <select id="paragraphCount" name="count">
+                    <option>1</option>
+                    <option>2</option>
+                    <option selected>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+            <!--
+            <div class="form-item">
+                <label for="endnotes">Include Endnotes?</label>
+                <input type="checkbox" name="endnotes" id="endnotes" checked />
+            </div>
+            -->
+            <br />
+            <input type="button" value="Let's get abstracto-conceptual!" onclick="generateIpsum();">
+        </form>
+
+        <div id="ipsout">
+        </div>
+    </div>
+</body>
+
+<script src="http://cdn.jsdelivr.net/jquery/2.1.1/jquery.min.js"></script>
+<script>
+  var phrases = [
+    // Infinite Jest
+    "like",
+    "type of thing",
+    "ovaloid mammarial bags",
+    "pericardium-piercer",
+    "puppet-a-clef-type allusion",
+    "ubiquitous anti-passivity slogan",
+    "avuncular sidewalk vendor",
+    "redemisement",
+    "psych-existential CPR session",
+    "votaried self-transcendence",
+    "doomed high-office claymation romance",
+    "retroactive puzzlement",
+    "experialist shuffle",
+    "rhetorical chapeau",
+    "unwittingly teratoid",
+    "astringent fluorescence",
+    "sub-rosa dogmatic",
+    "unspoken shamanistic fiat",
+    "cliffish nexus",
+    "vulgate signifier",
+    "boner-fide miracle",
+    "nonchalent verbal sangfroid",
+    "insurmalgate conceptual block",
+    "massive pseudo-cartographic right triangle",
+    "forkwork and mastication",
+    "feral hamster incursion",
+    "ideal time for a sneeze",
+    "granted,",  // NB: punctuation
+
+    // Tense Present
+    // http://instruct.westvalley.edu/lafave/DFW_present_tense.html
+    "prima facie OK",
+    "barrel of drugged trout",
+    "invites the very question it begs",
+    "Making A Statement",
+    "all kinds of gruesome social and emotional consequences",
+    "the mangled pieties of BusinessSpeak",
+    "pretty much",
+    "totally",
+    "thoroughgoingly",
+    "I submit",
+    "savagely and repeatedly wedgied",
+    "mordant pith (and royal we)",
+    "near-Himalayan condescension",
+    // "(which is in fact true)",  NB: Capitalization issue.
+    "when you come right down to it",
+
+    // 2005 Kenyon Commencement Address
+    // http://web.ics.purdue.edu/~drkelly/DFWKenyonAddress2005.pdf
+    "didactic little parable-ish stories",
+    "less bullshitty",
+    "\"Have a nice day\" in a voice that is the absolute voice of death",
+    "small act of bureaucratic kindness",
+    "myriad petty, unsexy ways",
+
+    // E unibus pluram: television and U.S. fiction
+    // http://www.thefreelibrary.com/E+unibus+pluram:+television+and+U.S.+fiction.-a013952319
+    "monitors his biceps",
+    "espial",
+    "a total unallergy to gazes",
+    "perspire creepily on the subway",
+    "scanning and sneering",
+    "television's classic irony-function",
+    "let's for a second imagine",
+    "lack the oracular foresight of Pynchon",
+    "too darn good to ablate",
+    "I Do Have A Thesis",
+    "a quick intermission contra paranoia",
+
+    // Shipping Out
+    // http://tetw.org/David_Foster_Wallace
+    "not titivation but titillation",
+    "oil derricks all bobbing fellatially",
+    "the glazed encamped look of people at airports in blizzards",
+    "transdermal motion-sickness prophylaxis",
+    "\"I'm fine. It's fine. Everything's fine.\"",
+    "and I mean this in the nicest possible way",
+    "Kmartish plastic",
+    "thirteen size-eleven Keds long by twelve Keds wide",
+    "at a narcotized, underwater pace",
+    "every morning at exactly 8:34 AM",
+    "and nothing was perfunctory again",
+    "wearing neither sunglasses nor a look of Dickensian oppression",
+    "stemming from a childhood trauma too hair-raising to discuss here",
+    "an absolute goddamned travesty",
+    "combination thud and kertwang",
+    "somebody else's ear-oil",
+    "my initial error in this latter regard",
+    "a day of Managed Fun"
+  ];
+
+  function capitalise(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function randomSample(arr, size) {
+    var shuffled = arr.slice(0),
+        i = arr.length,
+        min = i - size,
+        temp,
+        index;
+    while (i-- > min) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(min);
+  }
+
+  function generateIpsum() {
+    var ipsout = $("#ipsout");
+        paragraphCount = $("#paragraphCount").val(),
+        // endnotes = $("#endnotes").val(),
+        i = 0,
+        ipsum = "";
+
+    while (i++ < paragraphCount) {
+        var paragraph = "",
+            sentence = "",
+            sample = randomSample(phrases, 25);
+        sample.reduce(function(_, phrase, index) {
+            sentence += " " + phrase;
+            if (index % 5 === 0) {
+                var punc = sentence[sentence.length - 1] === "\"" ? " " : ". ";
+                paragraph += capitalise(sentence.trim()) + punc;
+                sentence = "";
+            }
+        });
+        ipsum += "<p>" + paragraph + "</p>";
+    }
+
+    ipsout.hide();
+    ipsout.html(ipsum);
+    ipsout.fadeIn("slow");
+  }
+</script>
+
+</html>
