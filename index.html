@@ -28,12 +28,10 @@
                     <option>5</option>
                 </select>
             </div>
-            <!--
             <div class="form-item">
                 <label for="endnotes">Include Endnotes?</label>
                 <input type="checkbox" name="endnotes" id="endnotes" checked />
             </div>
-            -->
             <br />
             <input type="button" value="Let's get abstracto-conceptual!" onclick="generateIpsum();">
         </form>
@@ -157,26 +155,41 @@
     return shuffled.slice(min);
   }
 
+  function generateSentence(selected_phrases) {
+      var sentence = selected_phrases.join(" ");
+      var punc = sentence[sentence.length - 1] === "\"" ? "" : ".";
+      return capitalise(sentence) + punc;
+  }
+
   function generateIpsum() {
     var ipsout = $("#ipsout");
         paragraphCount = $("#paragraphCount").val(),
-        // endnotes = $("#endnotes").val(),
+        include_endnotes = $("#endnotes").is(':checked'),
+        endnotes = [],
         i = 0,
         ipsum = "";
 
     while (i++ < paragraphCount) {
-        var paragraph = "",
-            sentence = "",
-            sample = randomSample(phrases, 25);
-        sample.reduce(function(_, phrase, index) {
-            sentence += " " + phrase;
-            if (index % 5 === 0) {
-                var punc = sentence[sentence.length - 1] === "\"" ? " " : ". ";
-                paragraph += capitalise(sentence.trim()) + punc;
-                sentence = "";
+        var sentences = [],
+            sample = randomSample(phrases, 25),
+            j = 0,
+            selected_phrases, noteCount;
+        while (j++ < 5) {
+            selected_phrases = sample.slice((j - 1) * 5, j * 5);
+            sentences.push(generateSentence(selected_phrases));
+            if (include_endnotes && Math.random() > 0.7) {
+                noteCount = 1 + Math.floor(Math.random() * 10) / 2;
+                endnotes.push(generateSentence(randomSample(phrases, noteCount)));
+                sentences.push("[" + endnotes.length + "]&nbsp;");
             }
-        });
-        ipsum += "<p>" + paragraph + "</p>";
+        }
+        ipsum += "<p>" + sentences.join(" ") + "</p>";
+    }
+    if (endnotes.length) {
+        ipsum += "<hr /><p>";
+        endnotes.map(function(note, index) {
+            ipsum += "[" + (index + 1) + "] " + note + "<br />";
+        })
     }
 
     ipsout.hide();
