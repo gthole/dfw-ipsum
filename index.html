@@ -72,7 +72,8 @@
     "forkwork and mastication",
     "feral hamster incursion",
     "ideal time for a sneeze",
-    "granted",  // NB: punctuation
+    "granted",
+    // "<i>sic</i>", NB: Capitalization issue.
 
     // Tense Present
     // http://instruct.westvalley.edu/lafave/DFW_present_tense.html
@@ -120,7 +121,6 @@
     "oil derricks all bobbing fellatially",
     "the glazed encamped look of people at airports in blizzards",
     "transdermal motion-sickness prophylaxis",
-    // "\"I'm fine. It's fine. Everything's fine.\"",
     "and I mean this in the nicest possible way",
     "Kmartish plastic",
     "thirteen size-eleven Keds long by twelve Keds wide",
@@ -165,8 +165,8 @@
               prev += capitalize(phrase);
               break;
           case 4:  // End of sentence
-              prev += phrase + ".";
-              if (includeEndnotes && Math.random() > 0.8) {
+              prev += phrase + (Math.random() > 0.9 ? "?" : ".");
+              if (includeEndnotes && Math.random() > 0.7) {
                   endnoteIndex++;
                   prev += " [" + endnoteIndex + "]&nbsp;";
               }
@@ -196,11 +196,12 @@
     }
     if (includeEndnotes) {
         i = 0;
-        ipsum += "<hr />";
+        ipsum += "<hr /><p>";
         while (i++ < endnoteIndex) {
-            var size = 1 + Math.floor(Math.random() * 5);
+            var size = 2 + Math.floor(Math.random() * 3);
             ipsum += "[" + i + "] " + generateParagraph(size, false) + "<br />";
         }
+        ipsum += "</p>";
     }
 
     ipsout.hide();
