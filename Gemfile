@@ -5,4 +5,4 @@ gem 'aws'
 gem 'haml'
 gem 'mime-types'
 
-ruby '1.9.3'
+ruby '2.1.0'
